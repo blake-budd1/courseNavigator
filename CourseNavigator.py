@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox, QStackedWidget, QFrame, QDateEdit, QScrollArea
 )
 from PyQt5.QtCore import Qt, QDate
-from PyQt5.QtGui import QPalette, QColor, QPixmap, QPainter, QPainterPath
+from PyQt5.QtGui import QPalette, QColor, QPixmap
 
 
 class LoginScreen(QWidget):
@@ -107,16 +107,18 @@ class FilterScreen(QWidget):
         # Profile Image and Username in a horizontal layout
         profile_layout = QHBoxLayout()
 
-        # Profile Image (Placeholder with circular clipping)
+        # Profile Image (Placeholder)
         profile_image = QLabel()
         pixmap = QPixmap(100, 100)  # Placeholder size 100x100
-        pixmap.fill(QColor("#BDC3C7"))  # Grey placeholder
-
-        # Make the pixmap circular
-        circular_pixmap = self.create_circular_pixmap(pixmap)
-
-        profile_image.setPixmap(circular_pixmap)
-        profile_image.setFixedSize(100, 100)
+        pixmap.fill(QColor("#a01edf"))  # Grey placeholder
+        profile_image.setPixmap(pixmap)
+        profile_image.setStyleSheet("""
+            QLabel {
+                border-radius: 50px;  # Circular image
+                border: 2px solid #2C3E50;
+            }
+        """)
+        profile_image.setFixedSize(75, 75)
         profile_layout.addWidget(profile_image)
 
         # Username (Placed to the right of the profile image)
@@ -201,7 +203,7 @@ class FilterScreen(QWidget):
         filter_panel.addWidget(QLabel("End Date"), alignment=Qt.AlignLeft)
         filter_panel.addWidget(self.end_date)
 
-        search_button = QPushButton("Search")
+        search_button = QPushButton("      Search      ")
         search_button.setStyleSheet("""
             QPushButton {
                 background-color: #2ECC71;
@@ -245,7 +247,7 @@ class FilterScreen(QWidget):
         self.results_container = QWidget()
 
         # Set background to light blue for the results area
-        self.results_container.setStyleSheet("background-color: #F0F8FF;")  # Light pastel blue background
+        self.results_container.setStyleSheet("background-color: #6290C3;")  # Light pastel blue background
         self.results_layout = QVBoxLayout()
         self.results_container.setLayout(self.results_layout)
         self.result_area.setWidget(self.results_container)
@@ -253,22 +255,6 @@ class FilterScreen(QWidget):
         main_layout.addWidget(self.result_area)
 
         self.setLayout(main_layout)
-
-    def create_circular_pixmap(self, pixmap):
-        size = pixmap.size()
-        mask = QPixmap(size)
-        mask.fill(Qt.transparent)
-
-        # Create a circular mask
-        painter = QPainter(mask)
-        path = QPainterPath()
-        path.addEllipse(0, 0, size.width(), size.height())
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setClipPath(path)
-        painter.drawPixmap(0, 0, pixmap)
-        painter.end()
-
-        return mask
 
     def handle_search(self):
         selected_course = self.course_dropdown.currentText()
@@ -304,7 +290,7 @@ class FilterScreen(QWidget):
                     # Display the filtered result
                     announcement_widget = QFrame()
                     announcement_widget.setStyleSheet("""
-                        background-color: white;
+                        background-color: rgba(255,255,255,180);
                         border: 1px solid #BDC3C7;
                         border-radius: 10px;
                         padding: 10px;
@@ -338,7 +324,7 @@ class FilterScreen(QWidget):
         self.content_type_dropdown.setCurrentIndex(0)
         self.module_dropdown.setCurrentIndex(0)
         self.keyword_field.clear()
-        self.start_date.clear()
+        self.start_date.setDate(QDate.currentDate())
         self.end_date.setDate(QDate.currentDate())
 
         # Clear the results area
