@@ -110,8 +110,9 @@ class FilterScreen(QWidget):
         # Profile Image (Placeholder)
         profile_image = QLabel()
         pixmap = QPixmap(100, 100)  # Placeholder size 100x100
-        pixmap.fill(QColor("#a01edf"))  # Grey placeholder
+        pixmap.fill(QColor("#6290C3"))  # Grey placeholder
         profile_image.setPixmap(pixmap)
+        
         profile_image.setStyleSheet("""
             QLabel {
                 border-radius: 50px;  # Circular image
@@ -190,7 +191,7 @@ class FilterScreen(QWidget):
         self.start_date.setCalendarPopup(True)
         self.start_date.setSpecialValueText("Select Start Date")  # No date selected initially
         self.start_date.setDateRange(QDate(1900, 1, 1), QDate(2100, 12, 31))
-        self.start_date.clear()  # Initially no date
+        self.start_date.setDate(QDate(2020, 8, 1)) # Set the date to 8/1/2020 -> instead of 1/1/2000
         self.start_date.setStyleSheet(combo_box_style)
         filter_panel.addWidget(QLabel("Start Date"), alignment=Qt.AlignLeft)
         filter_panel.addWidget(self.start_date)
@@ -324,7 +325,7 @@ class FilterScreen(QWidget):
         self.content_type_dropdown.setCurrentIndex(0)
         self.module_dropdown.setCurrentIndex(0)
         self.keyword_field.clear()
-        self.start_date.setDate(QDate.currentDate())
+        self.start_date.setDate(QDate(2020, 8, 1)) # Set the date to 8/1/2020 -> instead of 1/1/2000
         self.end_date.setDate(QDate.currentDate())
 
         # Clear the results area
