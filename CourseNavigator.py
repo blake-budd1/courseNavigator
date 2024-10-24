@@ -204,7 +204,7 @@ class FilterScreen(QWidget):
         filter_panel.addWidget(QLabel("End Date"), alignment=Qt.AlignLeft)
         filter_panel.addWidget(self.end_date)
 
-        search_button = QPushButton("      Search      ")
+        search_button = QPushButton("                  Search                  ")
         search_button.setStyleSheet("""
             QPushButton {
                 background-color: #2ECC71;
@@ -218,7 +218,6 @@ class FilterScreen(QWidget):
             }
         """)
         search_button.clicked.connect(self.handle_search)  # Connect search button to handle_search
-        filter_panel.addWidget(search_button, alignment=Qt.AlignCenter)
 
         clear_button = QPushButton("Clear Filters")
         clear_button.setStyleSheet("""
@@ -234,7 +233,11 @@ class FilterScreen(QWidget):
             }
         """)
         clear_button.clicked.connect(self.handle_clear)  # Connect clear button to handle_clear
+        
         filter_panel.addWidget(clear_button, alignment=Qt.AlignCenter)
+        
+        # Add the search button after the clear filters button
+        filter_panel.addWidget(search_button, alignment=Qt.AlignCenter)
 
         filter_panel_container = QFrame()
         filter_panel_container.setStyleSheet("background-color: white; padding: 10px;")
