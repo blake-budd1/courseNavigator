@@ -171,12 +171,31 @@ class FilterScreen(QWidget):
         self.setLayout(main_layout)
 
     def handle_search(self):
-        # Create a new tab for the search results
+        # Get filter values
         course = self.course_dropdown.currentText()
         keyword = self.keyword_field.text()
         content_type = self.content_type_dropdown.currentText()
         module_tag = self.module_dropdown.currentText()
 
+        # Determine the tab title
+        if course:  # Use course name if selected
+            tab_title = course
+        elif keyword:  # Use keyword if no course
+            tab_title = keyword
+        elif content_type and content_type != "":  # Use content type if no course or keyword
+            tab_title = content_type
+        elif module_tag and module_tag != "":  # Use module tag if nothing else
+            tab_title = module_tag
+        else:  # Default fallback
+            tab_title = "No Filter Applied"
+
+        # Prevent duplicate tabs with the same title
+        for i in range(self.tab_widget.count()):
+            if self.tab_widget.tabText(i) == tab_title:
+                self.tab_widget.setCurrentIndex(i)
+                return
+
+        # Create a new tab for the search results
         new_tab = QWidget()
         tab_layout = QVBoxLayout()
 
@@ -184,7 +203,7 @@ class FilterScreen(QWidget):
         result_area.setWidgetResizable(True)
         results_container = QWidget()
 
-        # Set background for the results container to match the design
+        # Set background for the results container
         results_container.setStyleSheet("background-color: #F0F8FF; padding: 10px;")
         results_layout = QVBoxLayout()
         results_container.setLayout(results_layout)
@@ -204,9 +223,10 @@ class FilterScreen(QWidget):
         tab_layout.addWidget(result_area)
         new_tab.setLayout(tab_layout)
 
-        # Add the new tab with search parameters
-        self.tab_widget.addTab(new_tab, f"{course} ({keyword})")
+        # Add the new tab with the determined title
+        self.tab_widget.addTab(new_tab, tab_title)
         self.tab_widget.setCurrentWidget(new_tab)
+
 
     def read_csv_data(self, course, content_type, module_tag, keyword):
         # This function reads the CSV file and filters the data
